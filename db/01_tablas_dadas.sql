@@ -8,13 +8,13 @@ CREATE TABLE SGR_FACTURAS (
     RUC_PROVEEDOR   VARCHAR(20),
     TOTAL           DECIMAL(12,2),
     FECHA           DATE,
-    ESTADO          VARCHAR(15)   -- 'Pendiente' o 'Aprobado'
+    ESTADO          VARCHAR(15)   -- pendiente o aprobado
 );
 
 CREATE TABLE SGR_GASCLUB_GASTOS (
     ID          INT,
     CEDULA      VARCHAR(20),
-    REFERENCIA  VARCHAR(30),      -- código del consumo en GasClub
+    REFERENCIA  VARCHAR(30),      -- código del consumo en gasclub
     TOTAL       DECIMAL(12,2),
     FECHA       DATE
 );
