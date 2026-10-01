@@ -42,4 +42,25 @@ function validarMonto(valor, campo, { permitirCero = false } = {}) {
   return texto;
 }
 
-module.exports = { validarCedula, validarMonto };
+/**
+ * Valida un texto opcional con longitud máxima.
+ *
+ * @param {unknown} valor - valor recibido.
+ * @param {string} campo  - nombre del campo, para el mensaje de error.
+ * @param {number} maximo - cantidad máxima de caracteres.
+ * @returns {string|null} - el texto sin espacios sobrantes, o null si no se envió.
+ * @throws {ErrorNegocio} - 400 si no es texto o es demasiado largo.
+ */
+function validarTextoOpcional(valor, campo, maximo) {
+  if (valor === undefined || valor === null || valor === '') return null;
+  if (typeof valor !== 'string') {
+    throw new ErrorNegocio(400, `${campo} debe ser un texto`);
+  }
+  const texto = valor.trim();
+  if (texto.length > maximo) {
+    throw new ErrorNegocio(400, `${campo} admite máximo ${maximo} caracteres`);
+  }
+  return texto || null;
+}
+
+module.exports = { validarCedula, validarMonto, validarTextoOpcional };

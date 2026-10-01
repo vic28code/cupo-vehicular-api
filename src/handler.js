@@ -1,7 +1,11 @@
 const { responder, leerCuerpo } = require('./http');
 const { ErrorNegocio } = require('./errores');
 const { verificarSalud } = require('./servicios/salud');
-const { crearColaborador } = require('./servicios/colaboradores');
+const {
+    crearColaborador,
+    actualizarCupo,
+    acreditarCupo,
+} = require('./servicios/colaboradores');
 
 /** Respuesta temporal. */
 const pendiente = async () => {
@@ -21,8 +25,14 @@ const rutas = {
         statusCode: 201,
         datos: await crearColaborador(leerCuerpo(event)),
     }),
-    'PUT /colaboradores/{cedula}/cupo': pendiente,
-    'POST /colaboradores/{cedula}/acreditaciones': pendiente,
+    'PUT /colaboradores/{cedula}/cupo': async (event) => ({
+        statusCode: 200,
+        datos: await actualizarCupo(event.pathParameters?.cedula, leerCuerpo(event)),
+    }),
+    'POST /colaboradores/{cedula}/acreditaciones': async (event) => ({
+        statusCode: 201,
+        datos: await acreditarCupo(event.pathParameters?.cedula),
+    }),
     'POST /facturas': pendiente,
     'POST /sincronizaciones/facturas': pendiente,
     'POST /sincronizaciones/gasclub': pendiente,
