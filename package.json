@@ -1,0 +1,39 @@
+{
+  "name": "cupo-vehicular-api",
+  "version": "1.0.0",
+  "description": "Servicio serverless que lleva el saldo del cupo vehicular de colaboradores",
+  "private": true,
+  "main": "src/handler.js",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "serverless offline --reloadHandler",
+    "db:up": "docker compose up -d",
+    "db:reset": "docker compose down -v && docker compose up -d"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vic28code/cupo-vehicular-api.git"
+  },
+  "keywords": [
+    "serverless",
+    "aws-lambda",
+    "postgresql"
+  ],
+  "author": "vic28code",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/vic28code/cupo-vehicular-api/issues"
+  },
+  "homepage": "https://github.com/vic28code/cupo-vehicular-api#readme",
+  "dependencies": {
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.164",
+    "@types/pg": "^8.23.1",
+    "serverless": "^3.40.0",
+    "serverless-offline": "^13.10.1"
+  }
+}

@@ -1,0 +1,28 @@
+service: cupo-vehicular-api
+frameworkVersion: '3'
+useDotenv: true
+
+provider:
+  name: aws
+  runtime: nodejs24.x
+  region: us-east-1
+  stage: dev
+  environment:
+    DB_HOST: ${env:DB_HOST}
+    DB_PORT: ${env:DB_PORT}
+    DB_NAME: ${env:DB_NAME}
+    DB_USER: ${env:DB_USER}
+    DB_PASSWORD: ${env:DB_PASSWORD}
+
+functions:
+  api:
+    handler: src/handler.main
+    events:
+      - httpApi:
+          method: GET
+          path: /salud
+
+# endpoints
+
+plugins:
+  - serverless-offline
