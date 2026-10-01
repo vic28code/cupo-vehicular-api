@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres:18
+    container_name: cupo-vehicular-db
+    command: postgres -c timezone=America/Guayaquil
+    environment:
+      POSTGRES_DB: cupo_vehicular
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql
+      - ./db:/docker-entrypoint-initdb.d:ro
+
+volumes:
+  db_data:
