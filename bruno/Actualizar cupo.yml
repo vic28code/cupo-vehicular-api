@@ -1,0 +1,23 @@
+info:
+  name: Actualizar cupo
+  type: http
+  seq: 2
+
+http:
+  method: PUT
+  url: http://localhost:3000/colaboradores/0912345678/cupo
+  body:
+    type: json
+    data: |-
+      {
+        "cupoMensual": 350,
+        "motivo": "Ajuste por cambio de cargo"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

@@ -1,55 +1,54 @@
-const { pool } = require('./db');
+const { responder, leerCuerpo } = require('./http');
+const { ErrorNegocio } = require('./errores');
+const { verificarSalud } = require('./servicios/salud');
+const { crearColaborador } = require('./servicios/colaboradores');
 
-/**
- * Respuesta HTTP en el formato que exige API Gateway.
- *
- * @typedef {Object} RespuestaHttp
- * @property {number} statusCode - Código HTTP.
- * @property {Object.<string, string>} headers - Cabeceras HTTP.
- * @property {string} body - Cuerpo de la respuesta, serializado como JSON.
- */
-
-/**
- * Punto de entrada de la lambda. Por ahora solo atiende GET /salud,
- * que verifica la conexión con la base de datos.
- *
- * @param {import('aws-lambda').APIGatewayProxyEventV2} event - Petición HTTP recibida desde API Gateway.
- * @returns {Promise<RespuestaHttp>} Respuesta HTTP con cuerpo JSON.
- */
-module.exports.main = async (event) => {
-    try {
-        const { rows } = await pool.query(`
-      SELECT current_setting('TimeZone')               AS zona_horaria,
-             TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS')   AS hora_servidor,
-             (SELECT COUNT(*) FROM sgr_facturas)       AS facturas,
-             (SELECT COUNT(*) FROM sgr_gasclub_gastos) AS consumos_gasclub
-    `);
-
-        return responder(200, {
-            ruta: event.routeKey,
-            baseDeDatos: 'ok',
-            ...rows[0],
-        });
-    } catch (error) {
-        console.error(error);
-        return responder(500, {
-            error: 'No se pudo consultar la base de datos',
-            detalle: error.message,
-        });
-    }
+/** Respuesta temporal. */
+const pendiente = async () => {
+    throw new ErrorNegocio(501, 'Endpoint aún no implementado');
 };
 
 /**
- * Arma una respuesta HTTP con cuerpo JSON.
- *
- * @param {number} statusCode - Código HTTP (200, 400, 404, etc.).
- * @param {Object} body - Objeto que se enviará como JSON.
- * @returns {RespuestaHttp} Respuesta lista para devolver desde la lambda.
+ * Tabla de rutas: cada routeKey de API Gateway apunta a la función que la atiende.
+ * Cada función devuelve el código HTTP y los datos de la respuesta.
  */
-function responder(statusCode, body) {
-    return {
-        statusCode,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
-    };
-}
+const rutas = {
+    'GET /salud': async () => ({
+        statusCode: 200,
+        datos: await verificarSalud(),
+    }),
+    'POST /colaboradores': async (event) => ({
+        statusCode: 201,
+        datos: await crearColaborador(leerCuerpo(event)),
+    }),
+    'PUT /colaboradores/{cedula}/cupo': pendiente,
+    'POST /colaboradores/{cedula}/acreditaciones': pendiente,
+    'POST /facturas': pendiente,
+    'POST /sincronizaciones/facturas': pendiente,
+    'POST /sincronizaciones/gasclub': pendiente,
+};
+
+/**
+ * Punto de entrada de la lambda: busca la ruta y convierte los errores
+ * en respuestas HTTP.
+ *
+ * @param {import('aws-lambda').APIGatewayProxyEventV2} event - petición recibida desde API Gateway.
+ * @returns {Promise<import('./http').RespuestaHttp>} - respuesta HTTP con cuerpo JSON.
+ */
+module.exports.main = async (event) => {
+    const ruta = rutas[event.routeKey];
+    if (!ruta) {
+        return responder(404, { error: `Ruta no encontrada: ${event.routeKey}` });
+    }
+
+    try {
+        const { statusCode, datos } = await ruta(event);
+        return responder(statusCode, datos);
+    } catch (error) {
+        if (error instanceof ErrorNegocio) {
+            return responder(error.statusCode, { error: error.message });
+        }
+        console.error(error);
+        return responder(500, { error: 'Error interno del servidor' });
+    }
+};

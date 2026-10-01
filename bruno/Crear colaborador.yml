@@ -1,0 +1,23 @@
+info:
+  name: Crear colaborador
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:3000/colaboradores
+  body:
+    type: json
+    data: |-
+      {
+        "cedula": "0912345678",
+        "cupoMensual": 300
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

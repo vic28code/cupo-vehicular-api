@@ -18,9 +18,13 @@ functions:
   api:
     handler: src/handler.main
     events:
-      - httpApi:
-          method: GET
-          path: /salud
+      - httpApi: 'GET /salud'
+      - httpApi: 'POST /colaboradores'
+      - httpApi: 'PUT /colaboradores/{cedula}/cupo'
+      - httpApi: 'POST /colaboradores/{cedula}/acreditaciones'
+      - httpApi: 'POST /facturas'
+      - httpApi: 'POST /sincronizaciones/facturas'
+      - httpApi: 'POST /sincronizaciones/gasclub'
 
 # endpoints
 
