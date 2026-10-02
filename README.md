@@ -2,8 +2,11 @@
 
 Servicio serverless que lleva la cuenta corriente del cupo vehicular de cada colaborador.
 El saldo aumenta cuando se acredita el cupo mensual y disminuye con dos fuentes de gasto:
-- las facturas (`SGR_FACTURAS`) y 
-- los consumos en GasClub (`SGR_GASCLUB_GASTOS`).
+
+- las facturas (`SGR_FACTURAS`)
+- los consumos en GasClub (`SGR_GASCLUB_GASTOS`)
+
+Tecnología y documentación:
 
 - **Lambda:** Node.js con Serverless Framework 3 y `serverless-offline`.
 - **Base de datos:** PostgreSQL 18 en Docker.
