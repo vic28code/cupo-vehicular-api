@@ -7,11 +7,7 @@ const {
     acreditarCupo,
 } = require('./servicios/colaboradores');
 const { registrarFactura } = require('./servicios/facturas');
-
-/** Respuesta temporal. */
-const pendiente = async () => {
-    throw new ErrorNegocio(501, 'Endpoint aún no implementado');
-};
+const { sincronizarFacturas, sincronizarGasClub } = require('./servicios/sincronizaciones');
 
 /**
  * Tabla de rutas: cada routeKey de API Gateway apunta a la función que la atiende.
@@ -38,8 +34,14 @@ const rutas = {
         statusCode: 201,
         datos: await registrarFactura(leerCuerpo(event)),
     }),
-    'POST /sincronizaciones/facturas': pendiente,
-    'POST /sincronizaciones/gasclub': pendiente,
+    'POST /sincronizaciones/facturas': async () => ({
+        statusCode: 200,
+        datos: await sincronizarFacturas(),
+    }),
+    'POST /sincronizaciones/gasclub': async () => ({
+        statusCode: 200,
+        datos: await sincronizarGasClub(),
+    }),
 };
 
 /**

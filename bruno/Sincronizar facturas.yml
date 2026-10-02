@@ -1,0 +1,16 @@
+info:
+  name: Sincronizar facturas
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: http://localhost:3000/sincronizaciones/facturas
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
