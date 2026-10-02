@@ -6,6 +6,7 @@ const {
     actualizarCupo,
     acreditarCupo,
 } = require('./servicios/colaboradores');
+const { registrarFactura } = require('./servicios/facturas');
 
 /** Respuesta temporal. */
 const pendiente = async () => {
@@ -33,7 +34,10 @@ const rutas = {
         statusCode: 201,
         datos: await acreditarCupo(event.pathParameters?.cedula),
     }),
-    'POST /facturas': pendiente,
+    'POST /facturas': async (event) => ({
+        statusCode: 201,
+        datos: await registrarFactura(leerCuerpo(event)),
+    }),
     'POST /sincronizaciones/facturas': pendiente,
     'POST /sincronizaciones/gasclub': pendiente,
 };

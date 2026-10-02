@@ -28,10 +28,10 @@ CREATE TABLE CV_HISTORIAL_CUPO (
 CREATE TABLE CV_MOVIMIENTOS (
     ID                 INT DEFAULT nextval('CV_MOVIMIENTOS_SEQ'),
     CEDULA             VARCHAR(20),
-    TIPO               VARCHAR(10),    -- crédito o débito
-    ORIGEN             VARCHAR(15),    -- acreditación o facturas o gasclub
+    TIPO               VARCHAR(10),    -- 'Credito' | 'Debito'
+    ORIGEN             VARCHAR(15),    -- 'Acreditacion' | 'Facturas' | 'GasClub'
     MONTO              DECIMAL(12,2),  -- siempre es positivo, el TIPO le da el signo
-    ESTADO             VARCHAR(15),    -- pendiente o aprobado (solo facturas)
+    ESTADO             VARCHAR(15),    -- 'Pendiente' | 'Aprobado' (solo facturas)
     ID_ORIGEN          INT,
     REFERENCIA         VARCHAR(30),    -- nro. factura o referencia gasclub
     RUC_PROVEEDOR      VARCHAR(20),
@@ -44,7 +44,7 @@ CREATE TABLE CV_MOVIMIENTOS (
 
 CREATE TABLE CV_SINCRONIZACIONES (
     ID                      INT DEFAULT nextval('CV_SINCRONIZACIONES_SEQ'),
-    TIPO                    VARCHAR(15),  -- facturas o gasclub
+    TIPO                    VARCHAR(15),  -- 'Facturas' | 'GasClub'
     FECHA_INICIO            TIMESTAMPTZ,
     FECHA_FIN               TIMESTAMPTZ,
     REGISTROS_LEIDOS        INT,

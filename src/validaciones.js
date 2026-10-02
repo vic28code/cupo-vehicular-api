@@ -32,7 +32,6 @@ function validarMonto(valor, campo, { permitirCero = false } = {}) {
     : '';
 
   // valida hasta 10 enteros y 2 decimales: lo que cabe en DECIMAL(12,2).
-
   if (!/^\d{1,10}(\.\d{1,2})?$/.test(texto)) {
     throw new ErrorNegocio(400, `${campo} debe ser un número positivo con máximo 2 decimales`);
   }
@@ -46,7 +45,7 @@ function validarMonto(valor, campo, { permitirCero = false } = {}) {
  * Valida un texto opcional con longitud máxima.
  *
  * @param {unknown} valor - valor recibido.
- * @param {string} campo  - nombre del campo, para el mensaje de error.
+ * @param {string} campo - nombre del campo, para el mensaje de error.
  * @param {number} maximo - cantidad máxima de caracteres.
  * @returns {string|null} - el texto sin espacios sobrantes, o null si no se envió.
  * @throws {ErrorNegocio} - 400 si no es texto o es demasiado largo.
@@ -63,4 +62,39 @@ function validarTextoOpcional(valor, campo, maximo) {
   return texto || null;
 }
 
-module.exports = { validarCedula, validarMonto, validarTextoOpcional };
+/**
+ * Valida el RUC del proveedor: exactamente 13 dígitos.
+ *
+ * @param {unknown} ruc - valor recibido.
+ * @returns {string} - el RUC validado.
+ * @throws {ErrorNegocio} - 400 si el formato no es válido.
+ */
+function validarRuc(ruc) {
+  if (typeof ruc !== 'string' || !/^\d{13}$/.test(ruc)) {
+    throw new ErrorNegocio(400, 'rucProveedor debe ser un texto de exactamente 13 dígitos');
+  }
+  return ruc;
+}
+
+/**
+ * Valida el número de factura con el formato del SRI:
+ * establecimiento, punto de emisión y secuencial (001-001-000000123).
+ *
+ * @param {unknown} numero - valor recibido.
+ * @returns {string} - el número de factura validado.
+ * @throws {ErrorNegocio} - 400 si el formato no es válido.
+ */
+function validarNumeroFactura(numero) {
+  if (typeof numero !== 'string' || !/^\d{3}-\d{3}-\d{9}$/.test(numero)) {
+    throw new ErrorNegocio(400, 'numeroFactura debe tener el formato 001-001-000000123');
+  }
+  return numero;
+}
+
+module.exports = {
+  validarCedula,
+  validarMonto,
+  validarTextoOpcional,
+  validarRuc,
+  validarNumeroFactura,
+};

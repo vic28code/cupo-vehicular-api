@@ -5,7 +5,7 @@
   "private": true,
   "main": "src/handler.js",
   "engines": {
-    "node": ">=24"
+    "node": ">=22"
   },
   "scripts": {
     "start": "serverless offline --reloadHandler",

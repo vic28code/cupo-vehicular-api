@@ -1,0 +1,25 @@
+info:
+  name: Registrar factura
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: http://localhost:3000/facturas
+  body:
+    type: json
+    data: |-
+      {
+        "cedula": "0912345678",
+        "numeroFactura": "001-001-000001000",
+        "rucProveedor": "1790012345001",
+        "total": 179.50
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

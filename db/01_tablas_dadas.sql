@@ -8,7 +8,7 @@ CREATE TABLE SGR_FACTURAS (
     RUC_PROVEEDOR   VARCHAR(20),
     TOTAL           DECIMAL(12,2),
     FECHA           DATE,
-    ESTADO          VARCHAR(15)   -- pendiente o aprobado
+    ESTADO          VARCHAR(15)   -- 'Pendiente' | 'Aprobado'
 );
 
 CREATE TABLE SGR_GASCLUB_GASTOS (
