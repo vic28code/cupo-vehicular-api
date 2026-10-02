@@ -9,8 +9,10 @@ http:
   body:
     type: json
     data: |-
-      {"cedula": "0912345678",
-       "cupoMensual": 300}
+      {
+        "cedula": "0912345678",
+        "cupoMensual": 300
+      }
   auth: inherit
 
 settings:

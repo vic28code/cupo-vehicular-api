@@ -6,6 +6,13 @@ info:
 http:
   method: PUT
   url: http://localhost:3000/colaboradores/0912345678/cupo
+  body:
+    type: json
+    data: |-
+      {
+        "cupoMensual": 350,
+        "motivo": "Ajuste por cambio de cargo"
+      }
   auth: inherit
 
 settings:

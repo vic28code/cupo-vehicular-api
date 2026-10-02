@@ -11,9 +11,9 @@ http:
     data: |-
       {
         "cedula": "0912345678",
-        "numeroFactura": "001-001-000001000",
+        "numeroFactura": "001-001-000000999",
         "rucProveedor": "1790012345001",
-        "total": 179.50
+        "total": 15.00
       }
   auth: inherit
 
