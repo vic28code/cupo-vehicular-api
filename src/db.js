@@ -6,6 +6,7 @@ const { Pool, types } = require('pg');
 
 types.setTypeParser(types.builtins.NUMERIC, (valor) => parseFloat(valor));
 types.setTypeParser(types.builtins.INT8, (valor) => parseInt(valor, 10));
+// las fechas (DATE) se dejan como texto 'YYYY-MM-DD' para que no se desfasen por la zona horaria.
 types.setTypeParser(types.builtins.DATE, (valor) => valor);
 
 /**
@@ -22,6 +23,12 @@ const pool = new Pool({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     max: 5,
+});
+
+// si la base se reinicia, las conexiones inactivas del pool emiten un error.
+// sin este manejador, ese error tumba el proceso de la lambda.
+pool.on('error', (error) => {
+    console.error('Conexión inactiva descartada:', error.message);
 });
 
 /**
@@ -42,7 +49,8 @@ async function enTransaccion(trabajo) {
         await cliente.query('COMMIT');
         return resultado;
     } catch (error) {
-        await cliente.query('ROLLBACK');
+        // si el ROLLBACK también falla (conexión caída), se conserva el error original.
+        await cliente.query('ROLLBACK').catch(() => { });
         throw error;
     } finally {
         cliente.release();
